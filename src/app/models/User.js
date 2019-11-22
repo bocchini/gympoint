@@ -1,3 +1,5 @@
+import bcrpyt from 'bcryptjs';
+
 import Sequelize, { Model } from 'sequelize';
 
 class User extends Model {
@@ -6,6 +8,7 @@ class User extends Model {
       {
         name: Sequelize.STRING,
         email: Sequelize.STRING,
+        password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
         provider: Sequelize.BOOLEAN,
       },
@@ -13,6 +16,17 @@ class User extends Model {
         sequelize,
       }
     );
+
+    this.addHook('beforeSave', async user => {
+      if (user.password) {
+        user.password_hash = await bcrpyt.hash(user.password, 8);
+      }
+    });
+    return this;
+  }
+
+  checkPassword(password) {
+    return bcrpyt.compare(password, this.password_hash);
   }
 }
 
