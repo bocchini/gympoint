@@ -49,11 +49,12 @@ class UserController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
+
     const { email, oldPassword } = req.body;
 
     const user = await User.findByPk(req.userId);
 
-    if (email !== user.email) {
+    if (typeof email !== 'undefined' && email !== user.email) {
       const userExists = await User.findOne({
         where: { email },
       });
@@ -67,8 +68,8 @@ class UserController {
       return res.status(401).json({ error: 'Old password does not match ' });
     }
 
-    if (req.body.provider) {
-      if (user.provider !== true && req.body.provider === true) {
+    if (req.body.provider === true) {
+      if (user.provider === false) {
         return res
           .status(401)
           .json({ error: 'Does not allow changed provider' });
