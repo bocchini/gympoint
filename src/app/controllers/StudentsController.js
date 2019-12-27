@@ -7,7 +7,7 @@ class StudentsController {
   async store(req, res) {
     const { provider } = await User.findOne({ where: { id: req.userId } });
     if (provider === false) {
-      return res.status(401).json({ error: ' Register is ever for provider ' });
+      return res.status(401).json({ error: 'Register is ever for provider ' });
     }
 
     const schema = Yup.object().shape({
