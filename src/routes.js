@@ -7,6 +7,7 @@ import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import StudentsController from './app/controllers/StudentsController';
 import PlanosController from './app/controllers/PlanosController';
+import GestaoMatriculasController from './app/controllers/GestaoMatriculasController';
 
 const routes = new Router();
 
@@ -25,5 +26,10 @@ routes.get('/planos', PlanosController.index);
 routes.post('/planos', PlanosController.store);
 routes.put('/planos', PlanosController.update);
 routes.delete('/planos/:id', PlanosController.delete);
+
+routes.post('/matriculas', GestaoMatriculasController.store);
+routes.get('/matriculas', GestaoMatriculasController.index);
+routes.put('/matriculas', GestaoMatriculasController.update);
+routes.delete('/matriculas/:id', GestaoMatriculasController.delete);
 
 export default routes;

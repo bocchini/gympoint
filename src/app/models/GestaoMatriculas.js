@@ -6,6 +6,7 @@ class GestaoMatriculas extends Model {
       {
         start_date: Sequelize.DATE,
         end_date: Sequelize.DATE,
+        price: Sequelize.DECIMAL(10, 2),
       },
       {
         sequelize,

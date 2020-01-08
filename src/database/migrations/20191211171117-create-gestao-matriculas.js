@@ -1,10 +1,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('gestao-matriculas', {
+    return queryInterface.createTable('gestao_matriculas', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
-        allowNull: false,
+        primaryKey: true,
       },
       start_date: {
         type: Sequelize.DATE,
@@ -21,12 +21,16 @@ module.exports = {
         onDelete: 'SET NULL',
         allowNull: true,
       },
-      sutdent_id: {
+      student_id: {
         type: Sequelize.INTEGER,
         references: { model: 'students', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: true,
+      },
+      price: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: false,
       },
       created_at: { type: Sequelize.DATE, allowNull: false },
       updated_at: { type: Sequelize.DATE, allowNull: false },
@@ -34,6 +38,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('gestao-matriculas');
+    return queryInterface.dropTable('gestao_matriculas');
   },
 };
