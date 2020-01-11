@@ -1,11 +1,14 @@
 import * as Yup from 'yup';
-import { addMonths, isBefore } from 'date-fns';
+import { addMonths, isBefore, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 // Models
 import GestaoMatriculas from '../models/GestaoMatriculas';
 import User from '../models/User';
 import Student from '../models/Students';
 import Planos from '../models/Planos';
+
+import Mail from '../../lib/Mail';
 
 class GestaoMatriculasController {
   async store(req, res) {
@@ -78,8 +81,23 @@ class GestaoMatriculasController {
       end_date,
       price,
     } = await GestaoMatriculas.create(req.body);
+
+    // SendMail
+    await Mail.sendMail({
+      to: `${student.nome} <${student.email}>`,
+      subject: 'Inscrição feita com sucesso',
+      template: 'registration',
+      context: {
+        name: student.nome,
+        start: format(start_date, " dd '/' MMMM '/' yy", { locale: pt }),
+        end: format(end_date, " dd '/' MMMM '/' yy", { locale: pt }),
+        value: price,
+      },
+    });
+
     return res.json({
       student_id,
+      name: student.nome,
       plan_id,
       start_date,
       end_date,
