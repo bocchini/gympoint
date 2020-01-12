@@ -89,8 +89,10 @@ class GestaoMatriculasController {
       template: 'registration',
       context: {
         name: student.nome,
-        start: format(start_date, " dd '/' MMMM '/' yy", { locale: pt }),
-        end: format(end_date, " dd '/' MMMM '/' yy", { locale: pt }),
+        plan_title: plan.title,
+        duration: plan.duration,
+        start: format(start_date, " dd'/'MM'/'yy", { locale: pt }),
+        end: format(end_date, " dd'/'MM'/'yy", { locale: pt }),
         value: price,
       },
     });
@@ -112,7 +114,18 @@ class GestaoMatriculasController {
     if (!isProvider) {
       return res.status(401).json({ error: 'Register is ever for provider' });
     }
-    const registation = await GestaoMatriculas.findAll({ limit: 20 });
+    const { page } = req.query;
+    const registation = await GestaoMatriculas.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['id', 'nome', 'email'],
+        },
+      ],
+    });
     return res.json(registation);
   }
 
