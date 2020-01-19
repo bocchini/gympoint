@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import Planos from '../models/Planos';
 import User from '../models/User';
 
-class PlanosController {
+class PlanController {
   async index(req, res) {
     const isProvider = await User.findOne({
       where: { id: req.userId, provider: true },
@@ -11,7 +11,11 @@ class PlanosController {
     if (!isProvider) {
       return res.status(401).json({ error: 'Register is ever for provider' });
     }
-    const planos = await Planos.findAll({ limit: 20 });
+    const { page } = req.query;
+    const planos = await Planos.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
     return res.json(planos);
   }
 
@@ -88,4 +92,4 @@ class PlanosController {
   }
 }
 
-export default new PlanosController();
+export default new PlanController();

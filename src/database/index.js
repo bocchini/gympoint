@@ -1,7 +1,6 @@
 // Arquivo de conexão com o BD
 import Sequelize from 'sequelize';
 import mongoose from 'mongoose';
-require('dotenv/config');
 
 import dataBaseConfig from '../config/database';
 
@@ -10,6 +9,8 @@ import User from '../app/models/User';
 import Students from '../app/models/Students';
 import Planos from '../app/models/Planos';
 import GestaoMatriculas from '../app/models/GestaoMatriculas';
+
+require('dotenv/config');
 
 const models = [User, Students, Planos, GestaoMatriculas];
 
@@ -30,7 +31,7 @@ class Database {
     this.mongoConnection = mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
     });
   }
 }

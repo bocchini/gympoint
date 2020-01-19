@@ -10,7 +10,7 @@ import Planos from '../models/Planos';
 
 import Mail from '../../lib/Mail';
 
-class GestaoMatriculasController {
+class ManagementEnrollmentController {
   async store(req, res) {
     const isProvider = await User.findOne({
       where: { id: req.userId, provider: true },
@@ -122,7 +122,7 @@ class GestaoMatriculasController {
         {
           model: Student,
           as: 'student',
-          attributes: ['id', 'nome', 'email'],
+          attributes: ['nome', 'email'],
         },
       ],
     });
@@ -153,13 +153,13 @@ class GestaoMatriculasController {
         student_id: req.body.student_id,
       },
     });
-    if (matricula === null) {
+    if (!matricula) {
       return res.status(400).json({ error: 'Registration not exists' });
     }
 
     if (req.body.plan_id) {
       const plan = await Planos.findByPk(req.body.plan_id);
-      if (plan === null) {
+      if (!plan) {
         return res.status(400).json({ error: 'Plan not exists' });
       }
       if (req.body.start_date) {
@@ -216,4 +216,4 @@ class GestaoMatriculasController {
   }
 }
 
-export default new GestaoMatriculasController();
+export default new ManagementEnrollmentController();
