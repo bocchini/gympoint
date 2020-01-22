@@ -1,4 +1,4 @@
-/* import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 const HelpOrdersSchema = new mongoose.Schema(
   {
@@ -17,6 +17,7 @@ const HelpOrdersSchema = new mongoose.Schema(
     answer_at: {
       type: Date,
       required: false,
+      default: null,
     },
   },
   {
@@ -25,4 +26,3 @@ const HelpOrdersSchema = new mongoose.Schema(
 );
 
 export default mongoose.model('HelpOrders', HelpOrdersSchema);
-*/

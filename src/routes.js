@@ -15,12 +15,13 @@ const routes = new Router();
 // Routes don´t neet autentication
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
+routes.use('/students', StudentsRoutes);
 
 routes.use(authMiddleware);
 
 routes.use('/planos', PlansRoutes);
 routes.use('/matriculas', ManagementRoutes);
-routes.use('/students', StudentsRoutes);
+
 routes.use('/users', UsesRouter);
 
 export default routes;

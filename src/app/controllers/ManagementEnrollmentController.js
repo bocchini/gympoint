@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { addMonths, isBefore, format } from 'date-fns';
+import { startOfDay, addMonths, isBefore, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
 // Models
@@ -32,7 +32,7 @@ class ManagementEnrollmentController {
 
     const student = await Student.findByPk(req.body.student_id);
     if (student === null) {
-      return res.status(400).json({ error: 'Estudante not exists' });
+      return res.status(400).json({ error: 'Student not exists' });
     }
 
     /**
@@ -40,7 +40,7 @@ class ManagementEnrollmentController {
      */
     const plan = await Planos.findByPk(req.body.plan_id);
     if (plan === null) {
-      return res.status(400).json({ error: 'Plano not exists' });
+      return res.status(400).json({ error: 'Plan not exists' });
     }
 
     /**
@@ -60,10 +60,6 @@ class ManagementEnrollmentController {
       },
     });
 
-    if (studentPlanExits !== null) {
-      return res.status(400).json({ Error: 'Student is plan' });
-    }
-
     /**
      *  Add Mounths in end date the plan
      */
@@ -73,6 +69,16 @@ class ManagementEnrollmentController {
      * Calculate values to plan
      */
     req.body.price = plan.duration * plan.price;
+
+    // Verify sudent have one plan valid
+    if (studentPlanExits) {
+      if (startOfDay(studentPlanExits.end_date) >= startOfDay(new Date())) {
+        return res.status(400).json({ Error: 'Student is plan' });
+      }
+      return res
+        .status(401)
+        .json({ Error: 'Student has a plan, please update to new plan' });
+    }
 
     const {
       student_id,
